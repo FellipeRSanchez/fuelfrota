@@ -36,7 +36,7 @@ export async function criarSessao(usuarioId: string): Promise<string> {
     email: usuario.email,
     nome: usuario.nome,
     role: usuario.role.nome,
-    permissoes: usuario.role.permissoes,
+    permissoes: usuario.role.permissoes.split(",").map(p => p.trim()),
   };
 
   const token = await assinarToken(payload);

@@ -103,9 +103,10 @@ export function FormAbastecimento() {
   });
 
   // Log form values on each change to help debug "invalid input" issues
+  const watchAllFields = form.watch();
   useEffect(() => {
-    console.log('[Debug] Form values snapshot:', form.getValues());
-  }, [form.watch()]);
+    console.log('[Debug] Form values snapshot:', watchAllFields);
+  }, [watchAllFields]);
 
   const estaEnviando = form.formState.isSubmitting;
   const hodometroAusente = form.watch("hodometro_ausente");

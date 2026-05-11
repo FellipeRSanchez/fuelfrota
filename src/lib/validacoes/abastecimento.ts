@@ -50,7 +50,7 @@ export const schemaAbastecimento = z
     // Se hodômetro NÃO está ausente, KM é obrigatório
     if (!dados.hodometro_ausente) {
       const km = Number(String(dados.km_hodometro).replace(",", "."));
-      if (!dados.km_hodometro || dados.km_hodometro.trim() === "") {
+      if (!dados.km_hodometro || String(dados.km_hodometro).trim() === "") {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "KM do hodômetro é obrigatório",
