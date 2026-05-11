@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FuelFrota
 
-## Getting Started
+Sistema de gestão de frotas e controle de combustível.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 14** (App Router) com TypeScript
+- **Tailwind CSS** + **shadcn/ui**
+- **Prisma ORM** (Neon PostgreSQL)
+- **NextAuth.js** (autenticação)
+- **Zod** (validação de dados)
+- **next-pwa** (PWA)
+- **react-hook-form** (formulários)
+
+## Estrutura
+
+```
+src/
+├── app/
+│   ├── (publico)/          # Rotas públicas (landing, login, registro)
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── (autenticado)/      # Rotas protegidas (painel, etc.)
+│   │   ├── layout.tsx
+│   │   └── painel/
+│   │       └── page.tsx
+│   ├── api/
+│   │   └── auth/[...nextauth]/route.ts
+│   ├── globals.css
+│   └── layout.tsx
+├── components/
+│   ├── forms/              # Componentes de formulário
+│   └── ui/                 # Componentes shadcn/ui
+├── generated/prisma/       # Prisma Client gerado
+├── lib/
+│   ├── validacoes/         # Schemas Zod compartilhados
+│   │   ├── index.ts
+│   │   └── usuario.ts
+│   ├── auth.ts             # Configuração NextAuth
+│   ├── prisma.ts           # Singleton Prisma Client
+│   └── utils.ts            # Funções utilitárias (cn)
+└── types/
+    ├── index.ts            # Tipos compartilhados
+    └── next-auth.d.ts      # Aumento de tipos NextAuth
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Convenções
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Nomes em português**: modelos, funções, variáveis, rotas
+- **Server Components por padrão** — `"use client"` só quando necessário
+- **Server Actions** para mutações
+- **Validação Zod** compartilhada entre cliente e servidor
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Começando
 
-## Learn More
+```bash
+# Instalar dependências
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Preencher DATABASE_URL com a string de conexão do Neon
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Gerar Prisma Client
+npx prisma generate
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Executar migrations (quando o banco estiver configurado)
+npx prisma migrate dev
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Iniciar desenvolvimento
+npm run dev
+```

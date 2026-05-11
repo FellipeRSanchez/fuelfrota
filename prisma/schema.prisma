@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model veiculos {
+  vei_id                 Int              @id @default(autoincrement())
+  vei_frota              String
+  vei_placa              String           @unique
+  vei_tipo               String?
+  vei_capacidade_tanque  Float            @default(0)
+  vei_consumo_referencia Float            @default(0)
+  vei_ativo              Boolean          @default(true)
+  abastecimentos         abastecimentos[]
+
+  @@map("veiculos")
+}
+
+model motoristas {
+  mot_id         Int              @id @default(autoincrement())
+  mot_nome       String
+  mot_cpf        String?          @unique
+  mot_ativo      Boolean          @default(true)
+  abastecimentos abastecimentos[]
+
+  @@map("motoristas")
+}
+
+model abastecimentos {
+  aba_id                     Int        @id @default(autoincrement())
+  aba_vei_id                 Int
+  aba_mot_id                 Int
+  aba_data_hora              DateTime?  @default(now()) @map("aba_data")
+  aba_km_hodometro           Int?
+  aba_hodometro_ausente      Boolean?   @default(false)
+  aba_litros_tanque_antes    Float      @default(0)
+  aba_litros_aprovados       Float      @default(0)
+  aba_km_previsto_rodar      Float      @default(0)
+  aba_km_rodados_calculado   Float?     @map("aba_km_rodados")
+  aba_consumo_real_calculado Float?     @map("aba_consumo_real")
+  aba_dentro_da_media        Boolean?
+  aba_observacao             String?    @map("aba_obs")
+  aba_litros_consumidos      Float?     @default(0)
+  aba_saldo_apos_consumo     Float      @default(0)
+  aba_litros_necessarios     Float      @default(0)
+  aba_saldo_apos_abastecer   Float      @default(0)
+  aba_saldo_final            Float      @default(0)
+  veiculos                   veiculos   @relation(fields: [aba_vei_id], references: [vei_id])
+  motoristas                 motoristas @relation(fields: [aba_mot_id], references: [mot_id])
+
+  @@map("abastecimentos")
+}
+
+model Role {
+  id         Int       @id @default(autoincrement())
+  nome       String    @unique
+  permissoes String
+  usuarios   Usuario[]
+
+  @@map("roles")
+}
+
+model Usuario {
+  id           String   @id @default(cuid())
+  nome         String
+  email        String   @unique
+  senhaHash    String
+  ativo        Boolean  @default(true)
+  roleId       Int      @default(1)
+  imagem       String?
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+  sessoes      Sessao[]
+  role         Role     @relation(fields: [roleId], references: [id])
+
+  @@map("usuarios")
+}
+
+model Sessao {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  usuarioId String
+  expiraEm  DateTime
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("sessoes")
+}
