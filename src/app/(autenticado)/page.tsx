@@ -2,7 +2,7 @@ import { obterSessao } from "@/lib/auth-nativo";
 import { obterVeiculosAtivos } from "@/lib/veiculos";
 import { GridVeiculos } from "@/components/painel/grid-veiculos";
 
-export default async function PaginaPainel() {
+export default async function PaginaInicialAutenticada() {
   const sessao = await obterSessao();
   const veiculos = await obterVeiculosAtivos();
 

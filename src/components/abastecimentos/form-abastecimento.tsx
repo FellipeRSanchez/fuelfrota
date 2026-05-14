@@ -94,7 +94,7 @@ export function FormAbastecimento() {
     // Use undefined for required selects so that Zod validation can correctly detect missing selection
     vei_id: "",
     mot_id: "",
-    hodometro_ausente: true,
+    hodometro_ausente: false,
     km_hodometro: "",
     litros_tanque_antes: "",
     litros_aprovados: "",
